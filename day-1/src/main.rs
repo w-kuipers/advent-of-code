@@ -70,7 +70,31 @@ fn part2() -> i32 {
                 }
             }
         }
-        println!("{line} -> {first:?}");
+        let Some(first) = first else {
+            panic!("Invalid input");
+        };
+
+        let mut last = None;
+
+        'out: for i in (0..line.len()).rev() {
+            for (index, num) in numbers.iter().enumerate() {
+                // If the current numbers char length is higher then line char length, it can not
+                // be in there so no need to proceed
+                if i + num.len() > line.len() {
+                    continue;
+                }
+
+                if line[i..i + num.len()] == **num {
+                    last = Some(1 + index / 2);
+                    break 'out;
+                }
+            }
+        }
+        let Some(last) = last else {
+            panic!("Invalid input");
+        };
+
+        answer += 10 * first as i32 + last as i32;
     }
 
     return answer;
