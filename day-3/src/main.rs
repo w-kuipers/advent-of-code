@@ -24,13 +24,13 @@ fn get_numbers(input_data: String) -> Vec<Number> {
                 let subline = &subline[lx..rx];
 
                 if let Ok(num) = subline.parse::<u32>() {
+                    println!("{num} {lx} - {rx}");
+
                     numbers.push(Number { number: num });
                     lx += subline.len();
                 }
-
                 rx -= 1;
             }
-
             lx += 1;
         }
     }
@@ -46,9 +46,9 @@ fn part1() -> i32 {
     // Pupulate vector with numbers
     let numbers = get_numbers(input_data);
 
-    for number in numbers {
-        println!("{}", number.number);
-    }
+    // for number in numbers {
+    //     println!("{}", number.number);
+    // }
 
     return answer;
 }
