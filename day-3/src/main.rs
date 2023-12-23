@@ -7,6 +7,8 @@ fn main() {
 #[derive(Debug)]
 struct Number {
     number: u32,
+    line: usize,
+    index_range: [usize; 2],
 }
 
 fn get_numbers(input_data: String) -> Vec<Number> {
@@ -24,9 +26,11 @@ fn get_numbers(input_data: String) -> Vec<Number> {
                 let subline = &subline[lx..rx];
 
                 if let Ok(num) = subline.parse::<u32>() {
-                    println!("{num} {lx} - {rx}");
-
-                    numbers.push(Number { number: num });
+                    numbers.push(Number {
+                        number: num,
+                        line: y,
+                        index_range: [lx, rx],
+                    });
                     lx += subline.len();
                 }
                 rx -= 1;
@@ -34,7 +38,6 @@ fn get_numbers(input_data: String) -> Vec<Number> {
             lx += 1;
         }
     }
-
     return numbers;
 }
 
@@ -44,11 +47,15 @@ fn part1() -> i32 {
     let mut answer: i32 = 0;
 
     // Pupulate vector with numbers
+    let lines: Vec<String> = input_data.lines().map(String::from).collect();
     let numbers = get_numbers(input_data);
 
-    // for number in numbers {
-    //     println!("{}", number.number);
-    // }
+    for (i, number) in numbers.iter().enumerate() {
+        // println!("{}, - {:?}", number.number, number.index_range);
+        if number.line > 0 {
+            println!("{}", lines[number.line - 1]);
+        }
+    }
 
     return answer;
 }
