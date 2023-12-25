@@ -2,6 +2,7 @@ use std::fs;
 
 fn main() {
     println!("Day 3 - Part 1: {}", part1());
+    println!("Day 3 - Part 3: {}", part2());
 }
 
 #[derive(Debug)]
@@ -9,6 +10,11 @@ struct Number {
     number: u32,
     line: usize,
     index_range: [usize; 2],
+}
+#[derive(Debug)]
+struct Star {
+    line: usize,
+    index: usize,
 }
 
 fn get_numbers(input_data: String) -> Vec<Number> {
@@ -111,6 +117,45 @@ fn part1() -> u32 {
                     answer += number.number;
                     break 'ni;
                 }
+            }
+        }
+    }
+
+    return answer;
+}
+
+fn get_stars(input_data: String) -> Vec<Star> {
+    let mut stars: Vec<Star> = Vec::new();
+
+    for (y, line) in input_data.lines().enumerate() {
+        for (x, char) in line.chars().enumerate() {
+            if char == '*' {
+                stars.push(Star { line: y, index: x });
+            }
+        }
+    }
+
+    return stars;
+}
+
+fn part2() -> u32 {
+    let input_data = fs::read_to_string("input-simple.txt").expect("Unable to read input data");
+
+    let mut answer: u32 = 0;
+
+    let lines: Vec<String> = input_data.lines().map(String::from).collect();
+    let stars = get_stars(input_data.clone());
+    let numbers = get_numbers(input_data.clone());
+
+    for star in stars {
+        println!("{:?}", star);
+
+        let numbers_adjacent: Vec<u32> = Vec::new();
+
+        for number in &numbers {
+            // Line above
+            if number.line == star.line - 1 {
+                println!("{}", number.number);
             }
         }
     }
