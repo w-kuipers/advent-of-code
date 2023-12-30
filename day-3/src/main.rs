@@ -2,7 +2,7 @@ use std::fs;
 
 fn main() {
     println!("Day 3 - Part 1: {}", part1());
-    println!("Day 3 - Part 3: {}", part2());
+    println!("Day 3 - Part 2: {}", part2());
 }
 
 #[derive(Debug)]
@@ -139,7 +139,7 @@ fn get_stars(input_data: String) -> Vec<Star> {
 }
 
 fn part2() -> u32 {
-    let input_data = fs::read_to_string("input-simple.txt").expect("Unable to read input data");
+    let input_data = fs::read_to_string("input.txt").expect("Unable to read input data");
 
     let mut answer: u32 = 0;
 
@@ -148,15 +148,43 @@ fn part2() -> u32 {
     let numbers = get_numbers(input_data.clone());
 
     for star in stars {
-        println!("{:?}", star);
 
-        let numbers_adjacent: Vec<u32> = Vec::new();
+        let mut numbers_adjacent: Vec<u32> = Vec::new();
 
         for number in &numbers {
+            
+            let index_start = if number.index_range[0] == 0 {0} else {number.index_range[0] - 1};
+
+            let index_end = if number.index_range[1] >= lines[number.line].len() - 1 {number.index_range[1] + 1} else {number.index_range[1] + 2};
+
             // Line above
             if number.line == star.line - 1 {
-                println!("{}", number.number);
+                for index in index_start..index_end {
+                    if star.index == index {
+                        numbers_adjacent.push(number.number);
+                    }
+                }
             }
+
+            // Same line
+            if number.line == star.line {
+                if star.index == index_start || star.index == index_end - 1 {
+                    numbers_adjacent.push(number.number);
+                }
+            }
+
+            // Line below
+            if number.line == star.line + 1 {
+                for index in index_start..index_end {
+                    if star.index == index {
+                        numbers_adjacent.push(number.number);
+                    }
+                }
+            }
+        }
+
+        if numbers_adjacent.len() == 2 {
+           answer += numbers_adjacent[0] * numbers_adjacent[1]; 
         }
     }
 
